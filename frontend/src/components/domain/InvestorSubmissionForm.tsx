@@ -128,7 +128,7 @@ export function InvestorSubmissionForm({ investorKey }: InvestorSubmissionFormPr
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-      {!realEncAvailable && (
+      {!realEncAvailable && demoAssist && (
         <DemoModeBanner message="Zama relayer not configured. Encryption produces a simulated preview only — cannot be submitted to a real contract. Set VITE_ZAMA_RELAYER_URL for real FHE." />
       )}
 
@@ -212,10 +212,10 @@ export function InvestorSubmissionForm({ investorKey }: InvestorSubmissionFormPr
         <div>
           <CiphertextBox
             value={ciphertext}
-            label={isRealEncryption ? "FHE Ciphertext Handle (real)" : "Simulated Ciphertext Preview (Demo Assist — not real FHE)"}
+            label={isRealEncryption ? "FHE Ciphertext Handle (real)" : "Simulated Ciphertext Preview"}
             isAnimating={isAnimating}
           />
-          {!isRealEncryption && (
+          {!isRealEncryption && demoAssist && (
             <p
               style={{
                 fontSize: "10px",

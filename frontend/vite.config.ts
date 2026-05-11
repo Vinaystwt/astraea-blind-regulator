@@ -13,10 +13,18 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      // Alias @zama-fhe/relayer-sdk to the local stub when not installed.
+      // Alias @zama-fhe/relayer-sdk to the correct web entry point if installed,
+      // otherwise use the local stub.
       ...(zamaInstalled
-        ? {}
-        : { "@zama-fhe/relayer-sdk": path.resolve(__dirname, "./src/lib/zamaStub.ts") }),
+        ? {
+            "@zama-fhe/relayer-sdk": path.resolve(
+              __dirname,
+              "node_modules/@zama-fhe/relayer-sdk/lib/web.js"
+            ),
+          }
+        : {
+            "@zama-fhe/relayer-sdk": path.resolve(__dirname, "./src/lib/zamaStub.ts"),
+          }),
     },
   },
   server: {
@@ -27,7 +35,8 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      external: zamaInstalled ? ["@zama-fhe/relayer-sdk"] : [],
+      // Do not make the Zama SDK external; it should be bundled.
+      external: [],
     },
   },
 });

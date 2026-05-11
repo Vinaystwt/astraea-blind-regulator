@@ -194,7 +194,7 @@ export function DecryptionPanel({ investorKey }: DecryptionPanelProps) {
             }}
           >
             <Lock size={10} />
-              {investorResultIsReal ? "Wallet-authorized decrypt" : "Demo Assist Expected Result"} — Investor {investorKey} Only
+              {investorResultIsReal ? "Wallet-authorized decrypt" : demoAssist ? "Demo Assist Expected Result" : "Simulated Result"} — Investor {investorKey} Only
           </div>
 
           <div
@@ -228,7 +228,7 @@ export function DecryptionPanel({ investorKey }: DecryptionPanelProps) {
             </div>
           )}
 
-          {!investorResultIsReal && (
+          {!investorResultIsReal && demoAssist && (
             <div
               style={{
                 marginTop: "12px",

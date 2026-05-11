@@ -136,7 +136,7 @@ export function AggregateReportCard() {
             }}
           >
             <Lock size={10} />
-            {aggregateIsReal ? "Wallet-authorized aggregate decrypt" : "Demo Assist expected aggregate"} — {FUND_METADATA.name}
+            {aggregateIsReal ? "Wallet-authorized aggregate decrypt" : demoAssist ? "Demo Assist expected aggregate" : "Simulated Aggregate"} — {FUND_METADATA.name}
           </div>
 
           {/* Metrics row */}
@@ -203,7 +203,7 @@ export function AggregateReportCard() {
             Aggregate metrics decrypted locally. Individual investor books remain mathematically sealed.
           </div>
 
-          {!aggregateIsReal && (
+          {!aggregateIsReal && demoAssist && (
             <div
               style={{
                 marginTop: "8px",

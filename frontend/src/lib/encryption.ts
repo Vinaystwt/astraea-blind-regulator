@@ -1,5 +1,5 @@
 import type { EncryptedInputPayload } from "@/types/astraea";
-import { getRelayerUrl, hasRelayer } from "@/config/contract";
+import { getRelayerUrl, hasRelayer, isDemoAssistEnabled } from "@/config/contract";
 import { generateFakeCiphertext } from "@/lib/format";
 
 export interface EncryptionResult {
@@ -13,13 +13,15 @@ export async function encryptAmount(
   userAddress: string,
   amount: number
 ): Promise<EncryptionResult> {
+  const relayerUrl = getRelayerUrl();
+  const demoAssist = isDemoAssistEnabled();
+
   if (hasRelayer()) {
     try {
-      const relayerUrl = getRelayerUrl();
-      // @zama-fhe/relayer-sdk is a peer dep not bundled here.
-      // If the SDK is available globally or injected, use it.
-      const zamaModule = await import(/* @vite-ignore */ "@zama-fhe/relayer-sdk").catch(() => null);
-      if (zamaModule) {
+      // Import the real SDK. Since we installed it, it should be available.
+      // We still use dynamic import to avoid bundling issues if the user hasn't run npm install.
+      const zamaModule = await import("@zama-fhe/relayer-sdk");
+      if (zamaModule && typeof zamaModule.createInstance === "function") {
         const { createInstance } = zamaModule;
         const instance = await createInstance({ relayerUrl });
         const input = instance.createEncryptedInput(contractAddress, userAddress);
@@ -34,12 +36,18 @@ export async function encryptAmount(
         };
       }
     } catch (err) {
+      if (!demoAssist) {
+        throw new Error(`Real FHE encryption failed: ${err instanceof Error ? err.message : String(err)}. Zama relayer at ${relayerUrl} might be unreachable.`);
+      }
       console.warn("Relayer encryption failed, falling back to demo mode:", err);
     }
   }
 
+  if (!demoAssist) {
+    throw new Error("Real FHE encryption unavailable. VITE_ZAMA_RELAYER_URL not configured or SDK failed to initialize.");
+  }
+
   // Demo Assist Mode: generate a visually plausible but fake ciphertext preview.
-  // This is clearly labeled in the UI; it is NOT submitted to the contract.
   const fakeCipher = generateFakeCiphertext(`${contractAddress}:${userAddress}:${amount}`);
   return {
     payload: { handle: fakeCipher, inputProof: "0x" + "00".repeat(32) },
