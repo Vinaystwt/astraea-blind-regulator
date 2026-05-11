@@ -13,24 +13,38 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      // Alias @zama-fhe/relayer-sdk/bundle to the local stub when not installed.
+      // When SDK is absent, alias /web and bare import to the stub so build succeeds.
+      // When SDK is present, no alias — Vite resolves via package.json "exports".
       ...(zamaInstalled
         ? {}
         : {
-            "@zama-fhe/relayer-sdk/bundle": path.resolve(__dirname, "./src/lib/zamaStub.ts"),
+            "@zama-fhe/relayer-sdk/web": path.resolve(__dirname, "./src/lib/zamaStub.ts"),
             "@zama-fhe/relayer-sdk": path.resolve(__dirname, "./src/lib/zamaStub.ts"),
           }),
     },
   },
+  optimizeDeps: {
+    // Exclude from esbuild pre-bundling.
+    // web.js uses new URL('./workerHelpers.js', import.meta.url) and
+    // new URL('tfhe_bg.wasm', import.meta.url) — these must stay relative to
+    // lib/web.js, not to a pre-bundled chunk at .vite/deps/.
+    exclude: zamaInstalled ? ["@zama-fhe/relayer-sdk/web"] : [],
+  },
   server: {
     port: 5173,
+    headers: {
+      // Required for SharedArrayBuffer (WASM threads). Without these,
+      // initSDK() gracefully degrades to single-thread mode — encryption
+      // still works, just slower.
+      "Cross-Origin-Opener-Policy": "same-origin",
+      "Cross-Origin-Embedder-Policy": "credentialless",
+    },
   },
   define: {
     global: "globalThis",
   },
   build: {
     rollupOptions: {
-      // Do not make the Zama SDK external; it should be bundled.
       external: [],
     },
   },

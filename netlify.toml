@@ -1,0 +1,14 @@
+[build]
+  base = "frontend"
+  publish = "frontend/dist"
+  command = "npm run build"
+
+# COOP/COEP enable SharedArrayBuffer for threaded WASM (Zama FHE performance).
+# credentialless (vs require-corp) allows cross-origin fonts/images without CORP headers.
+# Without these headers the SDK gracefully falls back to single-thread WASM — encryption
+# still works, just without parallelism.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Embedder-Policy = "credentialless"

@@ -68,7 +68,7 @@ export function DecryptionPanel({ investorKey }: DecryptionPanelProps) {
     }
     setIsRevealing(true);
     try {
-      const result = await decryptMyResult(investorHandles, demoFallback);
+      const result = await decryptMyResult(investorHandles, walletAddress, demoFallback);
       if (!result.isReal && !demoAssist) {
         pushToast("error", "Real wallet-authorized decrypt is unavailable in this browser session.");
         return;
