@@ -11,6 +11,19 @@ export interface DecryptionResult<T> {
   isReal: boolean;
 }
 
+let sdkInitialized: Promise<void> | null = null;
+
+function getNetworkProvider(): any {
+  if (typeof window !== "undefined" && (window as any).ethereum) {
+    return (window as any).ethereum;
+  }
+  const rpcUrl = import.meta.env.VITE_SEPOLIA_RPC_URL;
+  if (rpcUrl) {
+    return rpcUrl;
+  }
+  return undefined;
+}
+
 async function getDecryptors(): Promise<{
   decryptBool: (handle: string) => Promise<boolean>;
   decryptUint8: (handle: string) => Promise<bigint>;
@@ -19,10 +32,21 @@ async function getDecryptors(): Promise<{
   if (!hasRelayer()) return null;
   const demoAssist = isDemoAssistEnabled();
   try {
-    const zamaModule = await import("@zama-fhe/relayer-sdk");
+    const zamaModule = await import("@zama-fhe/relayer-sdk/bundle");
     if (!zamaModule || typeof zamaModule.createInstance !== "function") return null;
+
+    if (!sdkInitialized) {
+      sdkInitialized = zamaModule.initSDK();
+    }
+    await sdkInitialized;
+
     const { createInstance } = zamaModule;
-    const instance = await createInstance({ relayerUrl: import.meta.env.VITE_ZAMA_RELAYER_URL });
+    const instance = await createInstance({
+      relayerUrl: import.meta.env.VITE_ZAMA_RELAYER_URL,
+      chainId: 11155111,
+      gatewayChainId: 10901,
+      network: getNetworkProvider()
+    });
     return {
       decryptBool: (handle: string) => instance.reencrypt(handle) as Promise<boolean>,
       decryptUint8: (handle: string) => instance.reencrypt(handle) as Promise<bigint>,

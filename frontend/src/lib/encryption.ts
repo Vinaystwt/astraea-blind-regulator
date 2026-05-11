@@ -8,6 +8,19 @@ export interface EncryptionResult {
   ciphertextPreview: string;
 }
 
+let sdkInitialized: Promise<void> | null = null;
+
+function getNetworkProvider(): any {
+  if (typeof window !== "undefined" && (window as any).ethereum) {
+    return (window as any).ethereum;
+  }
+  const rpcUrl = import.meta.env.VITE_SEPOLIA_RPC_URL;
+  if (rpcUrl) {
+    return rpcUrl;
+  }
+  return undefined;
+}
+
 export async function encryptAmount(
   contractAddress: string,
   userAddress: string,
@@ -18,12 +31,21 @@ export async function encryptAmount(
 
   if (hasRelayer()) {
     try {
-      // Import the real SDK. Since we installed it, it should be available.
-      // We still use dynamic import to avoid bundling issues if the user hasn't run npm install.
-      const zamaModule = await import("@zama-fhe/relayer-sdk");
+      // Import the real SDK bundle. Since we installed it, it should be available.
+      const zamaModule = await import("@zama-fhe/relayer-sdk/bundle");
       if (zamaModule && typeof zamaModule.createInstance === "function") {
+        if (!sdkInitialized) {
+          sdkInitialized = zamaModule.initSDK();
+        }
+        await sdkInitialized;
+
         const { createInstance } = zamaModule;
-        const instance = await createInstance({ relayerUrl });
+        const instance = await createInstance({
+          relayerUrl,
+          chainId: 11155111,
+          gatewayChainId: 10901,
+          network: getNetworkProvider()
+        });
         const input = instance.createEncryptedInput(contractAddress, userAddress);
         input.add64(BigInt(amount));
         const encrypted = await input.encrypt();

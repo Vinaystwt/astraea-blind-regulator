@@ -13,16 +13,11 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      // Alias @zama-fhe/relayer-sdk to the correct web entry point if installed,
-      // otherwise use the local stub.
+      // Alias @zama-fhe/relayer-sdk/bundle to the local stub when not installed.
       ...(zamaInstalled
-        ? {
-            "@zama-fhe/relayer-sdk": path.resolve(
-              __dirname,
-              "node_modules/@zama-fhe/relayer-sdk/lib/web.js"
-            ),
-          }
+        ? {}
         : {
+            "@zama-fhe/relayer-sdk/bundle": path.resolve(__dirname, "./src/lib/zamaStub.ts"),
             "@zama-fhe/relayer-sdk": path.resolve(__dirname, "./src/lib/zamaStub.ts"),
           }),
     },
