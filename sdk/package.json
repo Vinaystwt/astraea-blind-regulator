@@ -1,0 +1,20 @@
+{
+  "name": "@astraea/sdk",
+  "version": "0.1.0",
+  "description": "TypeScript helpers for Astraea frontend integration",
+  "type": "module",
+  "main": "dist/astraeaClient.js",
+  "types": "dist/astraeaClient.d.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@zama-fhe/relayer-sdk": "0.4.1",
+    "ethers": "^6.16.0"
+  },
+  "devDependencies": {
+    "@zama-fhe/relayer-sdk": "0.4.1",
+    "ethers": "^6.16.0",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "network": "sepolia",
+  "chainId": 11155111,
+  "AstraeaFund": "0xB9F38E0180F62e80Be6ca44cE6202316FCcefEC9",
+  "deployer": "0x94c188F8280cA706949CC030F69e42B5544514ac",
+  "issuer": "0x94c188F8280cA706949CC030F69e42B5544514ac",
+  "regulator": "0xB6767dAA4aF50DA070FE2600E5f9C0d8146227fe",
+  "relayerUrl": "https://relayer.testnet.zama.org",
+  "policy": {
+    "fundName": "Astraea APAC Growth Note I",
+    "policyVersion": "v1",
+    "maxInvestorSubscription": "500000",
+    "maxFundExposure": "700000",
+    "unitLabel": "USDC simplified units"
+  },
+  "deploymentTx": "0xcf2f17f4078c0d3b16a556c9e7b22173a1deef1cf0a9906a161bbbeb94c8a323",
+  "deploymentBlockNumber": 10828295,
+  "deployedAt": "2026-05-10T18:26:04.441Z",
+  "openTx": "0xad6c39e3a2f1ec1ef0d4eaba8c6aea30687f8371b6f04006918c42446eb9a700",
+  "openBlockNumber": 10828297,
+  "openedAt": "2026-05-10T18:26:28.616Z",
+  "seedTxs": [
+    {
+      "label": "Investor A",
+      "address": "0xb4D1e1B488636EaF0e074ACF1B6b5C4F6Af223e6",
+      "amount": "400000",
+      "submitTx": "0xf2ed8d0897adb552e8f7dd4928e87c935ba553b19e318b6530cbcd37536beb26",
+      "blockNumber": 10828303,
+      "expectedPrivateResult": "APPROVED"
+    },
+    {
+      "label": "Investor B",
+      "address": "0xB1C45B18639f736Cdc5F22D2C75EB4f0474e3d7B",
+      "amount": "600000",
+      "submitTx": "0x6caad0479f925cab61559a45528d23768ae125be42e3f1ff59fd622fab88ec4d",
+      "blockNumber": 10828309,
+      "expectedPrivateResult": "REJECTED_PER_INVESTOR_CAP"
+    },
+    {
+      "label": "Investor C",
+      "address": "0xc99033b39a2a4e375452e088C42EeAD320e9Acd6",
+      "amount": "400000",
+      "submitTx": "0x5ea8434ceee4574585a484de8ee0d7f27a30f08d6333ee84f6308a3f900b3b66",
+      "blockNumber": 10828315,
+      "expectedPrivateResult": "REJECTED_FUND_CAPACITY"
+    }
+  ],
+  "seededAt": "2026-05-10T18:30:36.931Z"
+}

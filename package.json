@@ -1,0 +1,12 @@
+{
+  "name": "astraea",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "cd frontend && npm run dev",
+    "frontend:dev": "cd frontend && npm run dev",
+    "frontend:build": "cd frontend && npm run build",
+    "frontend:typecheck": "cd frontend && npm run typecheck",
+    "frontend:install": "cd frontend && npm install"
+  }
+}

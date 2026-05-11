@@ -1,0 +1,27 @@
+export const SEPOLIA_DEPLOYMENT = {
+  chainId: 11155111,
+  address: "0xB9F38E0180F62e80Be6ca44cE6202316FCcefEC9",
+  deploymentBlock: 10828295,
+  deployTx: "0xcf2f17f4078c0d3b16a556c9e7b22173a1deef1cf0a9906a161bbbeb94c8a323",
+  openTx: "0xad6c39e3a2f1ec1ef0d4eaba8c6aea30687f8371b6f04006918c42446eb9a700",
+  seedTxs: {
+    A: "0xf2ed8d0897adb552e8f7dd4928e87c935ba553b19e318b6530cbcd37536beb26",
+    B: "0x6caad0479f925cab61559a45528d23768ae125be42e3f1ff59fd622fab88ec4d",
+    C: "0x5ea8434ceee4574585a484de8ee0d7f27a30f08d6333ee84f6308a3f900b3b66",
+  },
+  actors: {
+    issuer: "0x94c188F8280cA706949CC030F69e42B5544514ac",
+    investorA: "0xb4D1e1B488636EaF0e074ACF1B6b5C4F6Af223e6",
+    investorB: "0xB1C45B18639f736Cdc5F22D2C75EB4f0474e3d7B",
+    investorC: "0xc99033b39a2a4e375452e088C42EeAD320e9Acd6",
+    regulator: "0xB6767dAA4aF50DA070FE2600E5f9C0d8146227fe",
+  },
+} as const;
+
+export const DEMO_TX_HASHES = [
+  SEPOLIA_DEPLOYMENT.deployTx,
+  SEPOLIA_DEPLOYMENT.openTx,
+  SEPOLIA_DEPLOYMENT.seedTxs.A,
+  SEPOLIA_DEPLOYMENT.seedTxs.B,
+  SEPOLIA_DEPLOYMENT.seedTxs.C,
+] as const;

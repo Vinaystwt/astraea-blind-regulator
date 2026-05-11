@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #0A0A0B;
+    color: #EDEDED;
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: #D4AF3740;
+    color: #EDEDED;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0A0A0B;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #27272A;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #8C7D64;
+  }
+}
+
+@layer components {
+  .font-display {
+    font-family: "Cormorant Garamond", Georgia, serif;
+  }
+
+  .font-mono {
+    font-family: "JetBrains Mono", Menlo, monospace;
+  }
+
+  .border-brass-subtle {
+    border-color: #8C7D6430;
+  }
+
+  .text-accent-gold {
+    color: #D4AF37;
+  }
+
+  .bg-void {
+    background-color: #0A0A0B;
+  }
+
+  .bg-surface {
+    background-color: #141416;
+  }
+
+  .bg-surface-elevated {
+    background-color: #1C1C1F;
+  }
+
+  /* Cipher scramble animation */
+  @keyframes cipher-char {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  .cipher-char-animate {
+    display: inline-block;
+    animation: cipher-char 0.05s ease-in-out;
+  }
+
+  /* Wipe reveal for decrypt */
+  @keyframes wipe-left-right {
+    from { clip-path: inset(0 100% 0 0); }
+    to { clip-path: inset(0 0% 0 0); }
+  }
+
+  .wipe-reveal {
+    animation: wipe-left-right 0.6s ease-out forwards;
+  }
+
+  /* Fade slide in */
+  @keyframes fade-slide {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-slide-in {
+    animation: fade-slide 0.3s ease-out;
+  }
+
+  /* Pending pulse */
+  @keyframes border-pulse {
+    0%, 100% { border-color: #27272A; }
+    50% { border-color: #8C7D64; }
+  }
+
+  .pending-border {
+    animation: border-pulse 1.5s ease-in-out infinite;
+  }
+}
+
+@layer utilities {
+  .text-text-primary { color: #EDEDED; }
+  .text-text-secondary { color: #A1A1AA; }
+  .text-text-tertiary { color: #52525B; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

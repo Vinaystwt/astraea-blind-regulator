@@ -1,0 +1,14 @@
+{
+  "sepolia": {
+    "AstraeaFund": "0x0000000000000000000000000000000000000000",
+    "chainId": 11155111,
+    "fundName": "Astraea APAC Growth Note I",
+    "policyVersion": "v1",
+    "maxInvestorSubscription": "500000",
+    "maxFundExposure": "700000"
+  },
+  "local": {
+    "AstraeaFund": "0x0000000000000000000000000000000000000000",
+    "chainId": 31337
+  }
+}
