@@ -36,7 +36,7 @@ export function AggregateReportCard() {
     }
     setIsDecrypting(true);
     try {
-      const result = await decryptAggregateReport(aggregateHandles, demoFallback);
+      const result = await decryptAggregateReport(aggregateHandles, walletAddress, demoFallback);
       if (!result.isReal && !demoAssist) {
         pushToast("error", "Real regulator decrypt is unavailable in this browser session.");
         return;

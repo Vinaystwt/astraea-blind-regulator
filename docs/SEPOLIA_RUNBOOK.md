@@ -35,7 +35,7 @@ npm run deploy:sepolia
 npm run open:sepolia
 ```
 
-Deployment writes `frontend-handoff/deployed-addresses.sepolia.json`.
+Deployment writes `contracts/deployments/sepolia.json` and public frontend deployment exports.
 
 Current deployed contract:
 

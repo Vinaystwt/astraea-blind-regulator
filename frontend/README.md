@@ -5,9 +5,9 @@ The React frontend for Astraea — The Blind Regulator.
 ## Quick Start
 
 ```bash
-# From repo root
-cp frontend-handoff/ABI.json frontend/public/ABI.json
-cd frontend
+# From repo root, refresh ABI first if contracts changed:
+cd contracts && npm run export:frontend
+cd ../frontend
 npm install
 npm run dev
 ```
@@ -48,7 +48,7 @@ VITE_ENABLE_ISSUER_CONTROLS=false
 
 1. Terminal 1: `cd contracts && npm run node`
 2. Terminal 2: `cd contracts && npm run seed:local && npm run export:frontend`
-3. Terminal 3: `cp frontend-handoff/ABI.json frontend/public/ABI.json && cd frontend && npm install && npm run dev`
+3. Terminal 3: `cd frontend && npm install && npm run dev`
 4. Open `http://localhost:5173`
 5. Connect MetaMask to `localhost:8545`, chainId `31337`
 

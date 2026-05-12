@@ -6,9 +6,13 @@ async function main() {
   const artifactPath = resolve(__dirname, "../artifacts/contracts/AstraeaFund.sol/AstraeaFund.json");
   const artifact = JSON.parse(readFileSync(artifactPath, "utf8"));
   const outDir = resolve(root, "frontend-handoff");
+  const frontendPublicDir = resolve(root, "frontend/public");
   mkdirSync(outDir, { recursive: true });
+  mkdirSync(frontendPublicDir, { recursive: true });
 
-  writeFileSync(resolve(outDir, "ABI.json"), `${JSON.stringify(artifact.abi, null, 2)}\n`);
+  const abiJson = `${JSON.stringify(artifact.abi, null, 2)}\n`;
+  writeFileSync(resolve(outDir, "ABI.json"), abiJson);
+  writeFileSync(resolve(frontendPublicDir, "ABI.json"), abiJson);
 
   const examplePath = resolve(outDir, "deployed-addresses.example.json");
   if (!existsSync(examplePath)) {
@@ -35,7 +39,7 @@ async function main() {
     );
   }
 
-  console.log(`Exported ABI to ${resolve(outDir, "ABI.json")}`);
+  console.log(`Exported ABI to ${resolve(outDir, "ABI.json")} and ${resolve(frontendPublicDir, "ABI.json")}`);
 }
 
 main().catch((error) => {

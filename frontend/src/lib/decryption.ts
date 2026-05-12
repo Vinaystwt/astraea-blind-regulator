@@ -133,24 +133,54 @@ export async function decryptMyResult(
 }
 
 /**
- * Decrypt the regulator's aggregate report.
- * Uses publicDecrypt if the contract has ACL-authorized the handles as publicly decryptable,
- * otherwise falls back to demo mode.
+ * Decrypt the regulator's aggregate report using Zama user-decrypt.
+ * The contract grants aggregate handles to the configured regulator, not to public decrypt.
  */
 export async function decryptAggregateReport(
   handles: AggregateReportHandles,
+  walletAddress: string,
   demoFallback?: DecryptedAggregateReport
 ): Promise<DecryptionResult<DecryptedAggregateReport>> {
   const instance = await getZamaInstance();
 
   if (instance) {
     try {
-      // publicDecrypt works only if the contract owner authorised these handles via ACL.
-      const result = await instance.publicDecrypt([
-        handles.acceptedExposureHandle,
-        handles.acceptedCountHandle,
-        handles.rejectedCountHandle,
-      ]);
+      const contractAddress = getContractAddress();
+      const keypair = instance.generateKeypair();
+      const { publicKey, privateKey } = keypair;
+
+      const startTimestamp = Math.floor(Date.now() / 1000);
+      const durationDays = 1;
+      const eip712 = instance.createEIP712(
+        publicKey,
+        [contractAddress],
+        startTimestamp,
+        durationDays
+      );
+
+      const ethProvider = new BrowserProvider((window as any).ethereum);
+      const signer = await ethProvider.getSigner();
+      const { EIP712Domain: _unused, ...typesForSigning } = eip712.types;
+      const signature = await signer.signTypedData(
+        eip712.domain,
+        typesForSigning,
+        eip712.message
+      );
+
+      const result = await instance.userDecrypt(
+        [
+          { handle: handles.acceptedExposureHandle, contractAddress },
+          { handle: handles.acceptedCountHandle, contractAddress },
+          { handle: handles.rejectedCountHandle, contractAddress },
+        ],
+        privateKey,
+        publicKey,
+        signature,
+        [contractAddress],
+        walletAddress,
+        startTimestamp,
+        durationDays
+      );
 
       const acceptedExposure = result[
         handles.acceptedExposureHandle as `0x${string}`
@@ -174,7 +204,7 @@ export async function decryptAggregateReport(
 
   if (!isDemoAssistEnabled()) {
     throw new Error(
-      "Real FHE aggregate decryption unavailable: VITE_ZAMA_RELAYER_URL not configured or SDK failed."
+      "Real FHE aggregate decryption unavailable: VITE_ZAMA_RELAYER_URL not configured, SDK init failed, or regulator wallet not connected."
     );
   }
 

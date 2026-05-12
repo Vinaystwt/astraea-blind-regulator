@@ -13,7 +13,9 @@ async function main() {
   updateEnvValue(envPath, "VITE_ASTRAEA_FUND_ADDRESS", deployment.AstraeaFund);
   updateEnvValue(envPath, "VITE_SEPOLIA_RPC_URL", process.env.SEPOLIA_RPC_URL || "");
   updateEnvValue(envPath, "VITE_ZAMA_RELAYER_URL", getRelayerUrl());
-  updateEnvValue(envPath, "VITE_DEMO_MODE", "true");
+  updateEnvValue(envPath, "VITE_ENABLE_DEMO_ASSIST", "false");
+  updateEnvValue(envPath, "VITE_SHOW_INTERNAL_GUIDES", "false");
+  updateEnvValue(envPath, "VITE_ENABLE_ISSUER_CONTROLS", "false");
 
   writeFileSync(resolve(frontendDir, "public/ABI.json"), require("node:fs").readFileSync(resolve(__dirname, "../../frontend-handoff/ABI.json")));
 

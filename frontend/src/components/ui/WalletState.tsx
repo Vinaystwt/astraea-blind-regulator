@@ -44,7 +44,7 @@ export function WalletState({ status, onConnect }: WalletStateProps) {
     "relayer-missing": {
       icon: AlertTriangle,
       title: "Zama relayer not configured",
-      body: "Set VITE_ZAMA_RELAYER_URL in frontend/.env. Without it, real FHE encryption is unavailable. Demo Assist Mode is active.",
+      body: "Set VITE_ZAMA_RELAYER_URL in frontend/.env. Without it, real FHE encryption/decryption is unavailable; Demo Assist appears only when explicitly enabled.",
     },
     connected: {
       icon: WifiOff,
